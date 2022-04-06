@@ -17,6 +17,7 @@ export type Producto = {
 export interface ICarrito extends Serializable {
   productos: Producto[];
   agregarProductos: (productos: Producto[]) => void;
+  eliminarProducto: (productoID: number) => Producto;
 }
 
 export type Modificacion<T> = Partial<T>;
