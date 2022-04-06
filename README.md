@@ -18,4 +18,7 @@ El proyecto consta hasta en momento de una API la cual tiene 2 endpoins principa
 5. DELETE: '/:id/productos/:id_prod' - Eliminar un producto del carrito por su id de carrito y de producto
 
 Desarrollado en **Javascript** utlizando **Express** como framework principal.
+
+## Arquitectura 
+
 Se busca de forma *básica* desarrollar una arquitectura de capas que permita modificar la forma en que se persisten los datos sin necesidad de modificar otra parte del proyecto, a excepción de la capa de persistencia.
