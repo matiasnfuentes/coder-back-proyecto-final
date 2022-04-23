@@ -1,9 +1,9 @@
 import { Modificacion, Producto } from "../modelo/types";
-import { ProductoDAO } from "../persistencia/productoDAO";
+import { ProductoDAOI } from "../persistencia/types";
 
 export class ProductoService {
-  productoDAO: ProductoDAO;
-  constructor(productoDAO: ProductoDAO) {
+  productoDAO: ProductoDAOI;
+  constructor(productoDAO: ProductoDAOI) {
     this.productoDAO = productoDAO;
   }
 
@@ -15,16 +15,20 @@ export class ProductoService {
     return await this.productoDAO.obtenerTodos();
   }
 
-  async obtener(id: number): Promise<Producto> {
-    return await this.productoDAO.obtener(id);
+  async obtener(id: string): Promise<Producto> {
+    try {
+      return await this.productoDAO.obtener(id);
+    } catch (e) {
+      throw { status: 404, message: "ID de producto inexistente" };
+    }
   }
 
-  async eliminar(id: number): Promise<void> {
+  async eliminar(id: string): Promise<void> {
     return await this.productoDAO.eliminar(id);
   }
 
   async modificar(
-    id: number,
+    id: string,
     modificacion: Modificacion<Producto>
   ): Promise<Producto> {
     return await this.productoDAO.modificar(id, modificacion);

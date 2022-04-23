@@ -1,13 +1,14 @@
 import * as fs from "fs";
-import { Modificacion, Serializable } from "../modelo/types";
+import { Modificacion, Serializable } from "../../modelo/types";
+import { DAO } from "../types";
 
-export class FileDAO<T extends Serializable> {
+export class FileDAO<T extends Serializable> implements DAO<T> {
   ruta: string;
   constructor(ruta: string) {
     this.ruta = ruta;
   }
 
-  async contenidoActual(): Promise<T[]> {
+  async obtenerTodos(): Promise<T[]> {
     try {
       const contenido = await fs.promises.readFile(this.ruta, "utf-8");
       return JSON.parse(contenido);
@@ -22,8 +23,10 @@ export class FileDAO<T extends Serializable> {
   async guardar(elementoAGuardar: T): Promise<T> {
     const elemento: T = { ...elementoAGuardar, id: 0, timestamp: Date.now() };
     try {
-      const elementos: T[] = await this.contenidoActual();
-      elemento.id = elementos[elementos.length - 1].id!! + 1;
+      const elementos: T[] = await this.obtenerTodos();
+      elemento.id = (
+        parseInt(elementos[elementos.length - 1].id!!) + 1
+      ).toString();
       await fs.promises.writeFile(
         this.ruta,
         JSON.stringify([...elementos, elemento])
@@ -35,8 +38,8 @@ export class FileDAO<T extends Serializable> {
     }
   }
 
-  async obtener(id: number): Promise<T> {
-    const elementos: T[] = await this.contenidoActual();
+  async obtener(id: string): Promise<T> {
+    const elementos: T[] = await this.obtenerTodos();
     const elemento: T | undefined = elementos.find((e) => e.id === id);
     if (!elemento)
       throw {
@@ -46,15 +49,15 @@ export class FileDAO<T extends Serializable> {
     return elemento;
   }
 
-  async eliminar(id: number) {
-    const elementos: T[] = await this.contenidoActual();
+  async eliminar(id: string) {
+    const elementos: T[] = await this.obtenerTodos();
     const indice = this.obtenerIndice(elementos, id);
     elementos.splice(indice, 1);
     await fs.promises.writeFile(this.ruta, JSON.stringify(elementos));
   }
 
-  async modificar(id: number, modificacion: Modificacion<T>): Promise<T> {
-    const elementos: T[] = await this.contenidoActual();
+  async modificar(id: string, modificacion: Modificacion<T>): Promise<T> {
+    const elementos: T[] = await this.obtenerTodos();
     const indice = this.obtenerIndice(elementos, id);
     elementos[indice] = {
       ...elementos[indice],
@@ -65,7 +68,7 @@ export class FileDAO<T extends Serializable> {
     return elementos[indice];
   }
 
-  obtenerIndice(elementos: T[], id: number) {
+  obtenerIndice(elementos: T[], id: string) {
     let indice: number = elementos.findIndex((p) => p.id === id);
     if (indice === -1) throw { status: 404, message: `Elemento no encontrado` };
     return indice;

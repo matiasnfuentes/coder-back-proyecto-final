@@ -33,7 +33,11 @@
   },
   "dependencies": {
     "@types/express": "^4.17.13",
+    "@types/node": "^17.0.25",
     "express": "^4.17.3",
-    "fs": "^0.0.1-security"
+    "firebase": "^9.6.11",
+    "firebase-admin": "^10.1.0",
+    "fs": "^0.0.1-security",
+    "mongoose": "^6.3.1"
   }
 }

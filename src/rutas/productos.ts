@@ -18,9 +18,7 @@ productos.get("/:id?", async (req, res) => {
   const { id } = req.params;
   try {
     if (!id) return res.send(await productoService.obtenerTodos());
-    const producto: Producto | undefined = await productoService.obtener(
-      parseInt(id)
-    );
+    const producto: Producto | undefined = await productoService.obtener(id);
     res.send(producto);
   } catch (e: any) {
     res.status(e.status).send({ error: e.message });
@@ -30,10 +28,10 @@ productos.get("/:id?", async (req, res) => {
 productos.delete("/:id", esAdministrador, async (req, res) => {
   const { id } = req.params;
   try {
-    await productoService.eliminar(parseInt(id));
+    await productoService.eliminar(id);
     res.send("Producto eliminado exitosamente");
   } catch (e: any) {
-    res.status(e.status).send({ error: e.message });
+    res.status(e.status || 500).send({ error: e.message });
   }
 });
 
@@ -41,8 +39,8 @@ productos.put("/:id", esAdministrador, async (req, res) => {
   const { id } = req.params;
   const modificacion = req.body;
   try {
-    res.send(await productoService.modificar(parseInt(id), modificacion));
+    res.send(await productoService.modificar(id, modificacion));
   } catch (e: any) {
-    res.status(e.status).send({ error: e.message });
+    res.status(e.status || 500).send({ error: e.message });
   }
 });

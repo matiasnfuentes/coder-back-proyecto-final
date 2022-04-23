@@ -2,9 +2,9 @@ import { ICarrito, Producto } from "./types";
 
 export class Carrito implements ICarrito {
   productos: Producto[];
-  id?: number;
+  id?: string;
   timestamp?: number;
-  constructor(id?: number, timestamp?: number, productos: Producto[] = []) {
+  constructor(id?: string, timestamp?: number, productos: Producto[] = []) {
     this.id = id;
     this.timestamp = timestamp;
     this.productos = productos;
@@ -25,7 +25,7 @@ export class Carrito implements ICarrito {
   }
 
   //Elimina un producto del carrito y lo devuelve
-  eliminarProducto(productoID: number): Producto {
+  eliminarProducto(productoID: string): Producto {
     const i: number = this.productos.findIndex((p) => p.id === productoID);
     if (i === -1)
       throw { message: "El producto a eliminar no existe en el carrito" };

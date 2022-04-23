@@ -2,18 +2,18 @@ import express from "express";
 import { productos } from "./rutas/productos";
 import { carrito } from "./rutas/carrito";
 import { ProductoService } from "./services/productoService";
-import { ProductoDAO } from "./persistencia/productoDAO";
 import { CarritoService } from "./services/carritoService";
-import { CarritoDAO } from "./persistencia/carritoDAO";
+import { getDAOS } from "./persistencia/getDAOS";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-export const productoService = new ProductoService(new ProductoDAO());
-export const carritoService = new CarritoService(
-  new CarritoDAO(),
-  productoService
-);
+const { productoDAO, carritoDAO } = getDAOS();
+export const productoService = new ProductoService(productoDAO);
+export const carritoService = new CarritoService(carritoDAO, productoService);
 
 // Rutas
 app.use("/api/productos", productos);
@@ -29,6 +29,10 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`conectado al puerto: ${PORT}`);
+});
+
+process.on("uncaughtException", (err) => {
+  console.log(err);
 });
 
 app.on("error", (error) => console.log(`Error en servidor ${error}`));
