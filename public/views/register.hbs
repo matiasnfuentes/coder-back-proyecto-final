@@ -1,0 +1,150 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="container" class="container">
+      <section style="background-color: #508bfc;">
+        <div class="container py-5 h-100">
+          <div
+            class="row d-flex justify-content-center align-items-center h-100"
+          >
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+              <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+
+                  <h3 class="mb-5">Complete los datos de registro</h3>
+                  <form
+                    action="http://{{domain}}/api/user/register"
+                    method="post"
+                    enctype="multipart/form-data"
+                  >
+
+                    <div class="form-outline mb-4">
+                      {{! Emaiil }}
+                      <input
+                        placeholder="youremail@yourdomain.com"
+                        type="email"
+                        id="email"
+                        class="form-control form-control-lg mb-2 text-center"
+                        name="email"
+                        required
+                      />
+                      {{! Password }}
+                      <input
+                        placeholder="Contraseña"
+                        type="password"
+                        id="password"
+                        class="form-control form-control-lg mb-2 text-center"
+                        name="password"
+                        required
+                      />
+
+                      {{! Repeat password }}
+                      <input
+                        placeholder="Repetir contraseña"
+                        type="password"
+                        id="repeatPassword"
+                        class="form-control form-control-lg mb-2 text-center"
+                        name="repeatPassword"
+                        required
+                      />
+
+                      {{! Name }}
+                      <input
+                        placeholder="Nombre y apellido"
+                        type="text"
+                        id="name"
+                        class="form-control form-control-lg mb-2 text-center"
+                        name="name"
+                        required
+                      />
+
+                      {{! Address }}
+                      <input
+                        placeholder="Dirección"
+                        type="text"
+                        id="address"
+                        class="form-control form-control-lg mb-2 text-center"
+                        name="address"
+                        required
+                      />
+                      {{! Age }}
+                      <input
+                        placeholder="Edad"
+                        type="number"
+                        id="age"
+                        class="form-control form-control-lg mb-2 text-center"
+                        name="age"
+                        required
+                      />
+
+                      {{! Phone }}
+                      <input
+                        placeholder="Teléfono"
+                        type="text"
+                        id="phone"
+                        class="form-control form-control-lg mb-3 text-center"
+                        name="phone"
+                        required
+                      />
+                      {{! Avatar }}
+                      <h4 class="mb-3">Imágen de perfil</h4>
+                      <div
+                        class="col-12 d-flex flex-column justify-content-around align-items-center mb-3"
+                      >
+                        <input
+                          class="form-control mb-3"
+                          type="file"
+                          id="avatar"
+                          name="avatar"
+                          onchange="preview()"
+                        />
+
+                      </div>
+                      <img id="frame" src="" class="img-fluid" />
+                    </div>
+                    <button
+                      id="register"
+                      class="btn btn-primary btn-lg btn-block"
+                      type="submit"
+                    >Registrar nueva cuenta</button>
+
+                  </form>
+                  <hr class="my-4" />
+                  <button
+                    id="login"
+                    class="btn btn-primary btn-lg btn-block"
+                    type="button"
+                  >Ir al login</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <script src="/register.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    >
+    </script>
+  </body>
+
+</html>

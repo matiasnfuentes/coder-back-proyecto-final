@@ -1,0 +1,54 @@
+<h2>Lista de productos</h2>
+{{#if products}}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Thumbnail</th>
+        <th scope="col">Stock</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products}}
+        <tr>
+          <th class="align-middle text-center" scope="row">{{@index}}</th>
+          <td class="align-middle text-center">{{this.name}} </td>
+          <td class="align-middle text-center">${{this.price}} </td>
+          <td class="align-middle text-center"><img
+              src="{{this.thumbnail}}"
+              alt="imagen del prod"
+              style="width: 150px; height:150px;"
+            /></td>
+          <td class="align-middle text-center">{{this.stock}}</td>
+          <td class="align-middle text-center">
+            <div
+              class="d-flex justify-content-center align-items-center flex-row"
+            >
+
+              <div class="counter">
+                <span class="down" onClick="decreaseCount(event, this)">-</span>
+                <input id="{{this._id}}-count" type="text" value="1" />
+                <span
+                  class="up"
+                  onClick="increaseCount(event, this, {{this.stock}})"
+                >+</span>
+              </div>
+              <button
+                class="btn-primary"
+                onClick="addProduct(`{{this._id}}`, `{{this.name}}`, {{this.price}}, `{{this.description}}`,`{{this.code}}`,`{{this.thumbnail}}`)"
+              >Agregar</button>
+            </div>
+
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <div class="alert alert-danger" role="alert">
+    No se encontraron datos
+  </div>
+{{/if}}
