@@ -1,5 +1,4 @@
 function deleteProduct(id) {
-  console.log("entra");
   fetch(`/api/cart/`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },

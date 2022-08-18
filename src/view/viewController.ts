@@ -1,10 +1,12 @@
 import { DOMAIN } from "../config/config";
-import { CartDTO, UserDTO } from "../persistencia/types";
-import { cartService } from "../services/cartService";
+import { UserDTO } from "../persistencia/types";
 import * as os from "os";
 import { Request, Response } from "express";
 import { productService } from "../services/productService";
 import axios from "axios";
+
+const PUBLIC_CHAT = "PUBLIC_CHAT";
+const PRIVATE_CHAT = "PRIVATE_CHAT";
 
 const getLoginFail = (req: Request, res: Response) => {
   res.render("login-fail", { layout: "login-fail", domain: DOMAIN });
@@ -28,11 +30,23 @@ const getMainPage = async (req: Request, res: Response) => {
 };
 
 const getChat = (req: Request, res: Response) => {
-  res.render("chat", { layout: "chat", domain: DOMAIN });
+  const { email } = req.user as UserDTO;
+  res.render("chat", {
+    layout: "chat",
+    isPublicChat: true,
+    domain: DOMAIN,
+    email,
+  });
 };
 
 const getPrivateChat = (req: Request, res: Response) => {
-  res.render("chat", { layout: "chat", domain: DOMAIN });
+  const { email } = req.user as UserDTO;
+  res.render("chat", {
+    layout: "chat",
+    isPublicChat: false,
+    domain: DOMAIN,
+    email,
+  });
 };
 
 const getProfile = (req: Request, res: Response) => {

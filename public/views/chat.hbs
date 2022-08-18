@@ -30,84 +30,36 @@
       {{> nav-bar}}
       
       <div class="col-8 mt5" id="chat">
-        <h2>Centro de mensajes - porcentaje de compresión
-          <span id="percentege">0%</span></h2>
+        <div class="d-flex flex-row col-12 space-around mb-5">
+          <h2 class="col-8">Centro de mensajes</h2>
+          <a class="col-4 btn btn-primary" href="/chat/{{#if isPublicChat}}{{{email}}}{{/if}}">Iniciar chat {{#if isPublicChat}}privado{{else}}público{{/if}}</a>
+        </div>
+        <div
+          class="row col-12 mt-3"
+          id="messages"
+          style="height: 200px; overflow: scroll;"
+        ></div>
         <form id="message-form">
-          <div class="col-4">
-            <input
-              class="form-control"
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Ingrese email para utilizar chat"
-              required
-            />
-            <input
-              class="form-control"
-              type="text"
-              name="firstName"
-              id="firstName"
-              placeholder="Ingrese nombre para utilizar chat"
-              required
-            />
-            <input
-              class="form-control"
-              type="text"
-              name="lastName"
-              id="lastName"
-              placeholder="Ingrese apellido para utilizar chat"
-              required
-            />
-            <input
-              class="form-control"
-              type="number"
-              name="age"
-              id="age"
-              placeholder="Ingrese edad para utilizar chat"
-              required
-            />
-            <input
-              class="form-control"
-              type="text"
-              name="alias"
-              id="alias"
-              placeholder="Ingrese alias para utilizar chat"
-              required
-            />
-            <input
-              class="form-control"
-              type="url"
-              name="avatar"
-              id="avatar"
-              placeholder="Ingrese avatar para utilizar chat"
-              required
-            />
-          </div>
-
-          <div
-            class="row col-12 mt-3"
-            id="messages"
-            style="height: 200px; overflow: scroll;"
-          ></div>
-
           <div class="mt-2">
             <input
               class="form-control"
               id="message"
               type="text"
               name="email"
-              id="emailUsuario"
               required
             />
             <button
               class="btn btn-primary mt-2"
               id="send"
-              disabled="disabled"
             >Enviar Mensaje</button>
           </div>
         </form>
       </div>
     </div>
+    <script>
+      const isPublicChat = {{{isPublicChat}}};
+      const email = "{{{email}}}";
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"
     ></script>

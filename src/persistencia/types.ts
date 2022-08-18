@@ -28,18 +28,6 @@ export type ProductDTO = {
   category: string;
 } & Serializable;
 
-export type MessageDTO = {
-  author: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    age: string;
-    alias: string;
-    avatar: string;
-  };
-  text: string;
-} & Serializable;
-
 export interface UserDTO extends Serializable {
   email: string;
   password: string;

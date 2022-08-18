@@ -43,7 +43,10 @@ export class MongoDAO<T extends Serializable> implements DAO<T> {
     return docs.map((d) => d.toObject());
   }
 
-  async getAllBy(field: string, value: string | number): Promise<T[]> {
+  async getAllBy(
+    field: string,
+    value: string | number | boolean
+  ): Promise<T[]> {
     const docs = await this.model.find({ [field]: value });
     return docs.map((d) => d.toObject());
   }

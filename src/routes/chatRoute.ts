@@ -5,5 +5,5 @@ import { validate, ADD_MESSAGE } from "../middlewares/validator";
 export const chatRoute = Router();
 const { getMessages, saveMessage } = chatController;
 
-chatRoute.get("/", getMessages);
+chatRoute.get("/:email?", getMessages);
 chatRoute.post("/", validate(ADD_MESSAGE), saveMessage);

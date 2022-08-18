@@ -11,7 +11,6 @@ export const rejectRequest = (
   exception: Exception,
   defaultMessage: string
 ) => {
-  console.log(exception);
   logger.error(exception);
   res.status(exception.status || 500).send(exception.message || defaultMessage);
 };

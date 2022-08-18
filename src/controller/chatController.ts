@@ -5,7 +5,12 @@ import { Request, Response } from "express";
 
 const getMessages = async (req: Request, res: Response): Promise<void> => {
   try {
-    res.send(await chatService.getNormalizedMessages());
+    const author = req.params.email;
+    if (author) {
+      res.send(await chatService.getMessagesByAuthor(author));
+    } else {
+      res.send(await chatService.getMessages());
+    }
   } catch (e: any) {
     rejectRequest(
       res,
@@ -19,8 +24,7 @@ const saveMessage = async (req: Request, res: Response) => {
   const mensaje = req.body;
   try {
     checkBodyErrors(req);
-    await chatService.saveMessage(mensaje);
-    res.send("guardado ok");
+    res.send(await chatService.saveMessage(mensaje));
   } catch (e: any) {
     rejectRequest(res, e, "The message couldn't be saved.");
   }

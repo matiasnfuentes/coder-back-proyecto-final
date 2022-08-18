@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { MessageDTO } from "../types";
+import { MessageDTO } from "../../model/messageDTO";
 import { MongoDAO } from "./mongoDAO";
 
 export class MessageDAO extends MongoDAO<MessageDTO> {
@@ -8,16 +8,11 @@ export class MessageDAO extends MongoDAO<MessageDTO> {
   private constructor() {
     const schema = new mongoose.Schema(
       {
-        author: {
-          id: { type: String, require: true },
-          firstName: { type: String, require: true },
-          lastName: { type: String, require: true },
-          age: { type: String, require: true },
-          alias: { type: String, require: true },
-          avatar: { type: String, require: true },
-        },
+        email: { type: String, require: true },
+        type: { type: String, require: true },
         text: { type: String, require: true },
         timestamp: { type: String, require: true },
+        private: { type: Boolean, require: true },
       },
       { versionKey: false }
     );

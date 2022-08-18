@@ -57,13 +57,13 @@ const checkout = async (req: Request, res: Response) => {
 
 const getCart = async (req: Request, res: Response) => {
   const { email, address: deliverAddress } = req.user as UserDTO;
-  console.log(deliverAddress);
   try {
     res.send(await cartService.getOrCreateCart(email, deliverAddress));
   } catch (e: any) {
     rejectRequest(res, e, "The cart couldn't be created");
   }
 };
+
 export const carritoController = {
   checkout,
   getCart,

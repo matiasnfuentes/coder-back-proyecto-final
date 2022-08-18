@@ -29,7 +29,6 @@ export const setUpApp = (app: express.Application) => {
   );
   app.set("views", VIEWS_PATH);
   app.set("view engine", "hbs");
-  console.log(SESSION_EXPARTION_TIME);
 
   // Server configs
   app.use(express.json());

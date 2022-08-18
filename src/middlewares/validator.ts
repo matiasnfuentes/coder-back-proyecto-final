@@ -84,12 +84,10 @@ export const validate = (method: RequestInput) => {
       ];
     case ADD_MESSAGE:
       return [
-        body("author.id", "Invalid email").exists().isEmail(),
-        body("author.firstName", "Invalid first name").exists().isString(),
-        body("author.lastName", "Invalid last name").exists().isString(),
-        body("author.alias", "Invalid alias").exists().isString(),
-        body("author.age", "Age must be a number").exists().isInt(),
-        body("author.avatar", "Avatar must be an url").optional().isURL(),
+        body("email", "Invalid email").exists().isEmail(),
+        body("timestamp", "Invalid timestamp").exists().isNumeric(),
+        body("type", "Invalid message type").exists().isAlpha(),
+        body("text", "The message must exist").exists().isString(),
       ];
     case DELETE_PRODUCT_FROM_CART:
       return [param("id").exists(), param("productId").exists()];
@@ -105,7 +103,6 @@ export const checkBodyErrors = (req) => {
 
   if (!errors.isEmpty()) {
     const errorMessages = parsedErrors;
-    console.log(errorMessages);
     throw { status: 400, message: errorMessages };
   }
 };

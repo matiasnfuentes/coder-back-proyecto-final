@@ -1,30 +1,29 @@
 import { normalize, schema } from "normalizr";
-import { MessageDTO } from "../persistencia/types";
+import { MessageDTO } from "../model/messageDTO";
 import { DAOFactory, MESSAGE } from "../persistencia/DAOFactory";
 import { MessageDAO } from "../persistencia/mongodb/messageDAO";
 
 const messagesDAO = DAOFactory.createDAO(MESSAGE) as MessageDAO;
 
-const author = new schema.Entity("author");
-
-const message = new schema.Entity(
-  "message",
-  { author: author },
-  { idAttribute: "_id" }
-);
-
-const listOfMessages = new schema.Entity("messages", {
-  messages: [message],
-});
-
-const getNormalizedMessages = async () => {
-  const messages: MessageDTO[] = await messagesDAO.getAll();
-  const originalData = { id: "messages", messages };
-  return normalize(originalData, listOfMessages);
+const getMessages = async () => {
+  const messages: MessageDTO[] = await messagesDAO.getAllBy("private", false);
+  return messages;
 };
 
-const saveMessage = async (message: MessageDTO) => {
-  await messagesDAO.save(message);
+const getMessagesByAuthor = async (author: string) => {
+  const messages: MessageDTO[] = await messagesDAO.getAllBy(
+    "author.id",
+    author
+  );
+  return messages;
 };
 
-export const chatService = { getNormalizedMessages, saveMessage };
+const saveMessage = async (message: MessageDTO): Promise<MessageDTO> => {
+  return await messagesDAO.save(message);
+};
+
+export const chatService = {
+  getMessages,
+  getMessagesByAuthor,
+  saveMessage,
+};

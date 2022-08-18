@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { logger } from "../services/logger";
 
 const logout = (req: Request, res: Response, next: NextFunction) => {
-  req.logOut();
+  req.logout((err) => {});
   next();
 };
 
