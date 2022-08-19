@@ -4,11 +4,14 @@ document.getElementById("message-form").onsubmit = (e) => {
   e.preventDefault();
   const inputField = document.getElementById("message");
   const timestamp = new Date();
+  if (isAdminChat) {
+    email = document.getElementById("userEmail").value;
+  }
   const message = {
     email,
     text: inputField.value,
     timestamp: timestamp.getTime(),
-    type: "USER",
+    type: Boolean(isAdminChat) ? "SYSTEM" : "USER",
   };
 
   if (isPublicChat) {
@@ -27,9 +30,9 @@ const renderChatBlock = (data) => {
   const time = new Date(Number(data.timestamp));
 
   chatBlock.innerHTML = `
-      <p><strong style='color: blue'>${
-        data.email
-      }</strong> <span style='color: brown'>${time.toLocaleString()}</span>: <span>${
+      <p><strong style='color: ${data.type === "SYSTEM" ? "red" : "blue"}'>${
+    data.type === "SYSTEM" ? "SYSTEM" : data.email
+  }</strong> <span style='color: brown'>${time.toLocaleString()}</span>: <span>${
     data.text
   }</span></p>`;
   document.getElementById("messages").appendChild(chatBlock);

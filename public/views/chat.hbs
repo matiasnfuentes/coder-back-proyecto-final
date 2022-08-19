@@ -45,9 +45,20 @@
               class="form-control"
               id="message"
               type="text"
-              name="email"
+              name="message"
+              placeholder="Escribe tu mensaje..."
               required
             />
+            {{#if isAdminChat}}
+            <input
+              class="form-control"
+              id="userEmail"
+              type="text"
+              name="userEmail"
+              placeholder="Email del usuario"
+              required
+            />
+            {{/if}}
             <button
               class="btn btn-primary mt-2"
               id="send"
@@ -58,7 +69,8 @@
     </div>
     <script>
       const isPublicChat = {{{isPublicChat}}};
-      const email = "{{{email}}}";
+      const isAdminChat = {{{isAdminChat}}};
+      let email = "{{{email}}}";
     </script>
     <script
       src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"

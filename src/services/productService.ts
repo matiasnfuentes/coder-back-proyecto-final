@@ -1,6 +1,6 @@
-import { DAOFactory, PRODUCT } from "../persistencia/DAOFactory";
-import { ProductDAO } from "../persistencia/mongodb/productDAO";
-import { ProductDTO } from "../persistencia/types";
+import { DAOFactory, PRODUCT } from "../persistance/DAOFactory";
+import { ProductDAO } from "../persistance/mongodb/productDAO";
+import { ProductDTO } from "../model/productModel";
 
 const productDAO = DAOFactory.createDAO(PRODUCT) as ProductDAO;
 const INCREASE = "Increase";

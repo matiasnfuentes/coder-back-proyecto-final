@@ -1,13 +1,11 @@
-import { ADMIN_EMAIL } from "../config/config";
-import { Cart } from "../model/cartModel";
-import { ProductDTO } from "../persistencia/types";
-import { CART, DAOFactory, ORDER } from "../persistencia/DAOFactory";
-import { CartDAO } from "../persistencia/mongodb/cartDAO";
-import { CartDTO } from "../persistencia/types";
-import { transporter, twilioClient } from "./messageService";
+import { Cart, CartDTO } from "../model/cartModel";
+import { ProductDTO } from "../model/productModel";
+import { CART, DAOFactory, ORDER } from "../persistance/DAOFactory";
+import { CartDAO } from "../persistance/mongodb/cartDAO";
+import { sendOrderNotifications } from "./messageService";
 import { productService } from "./productService";
 import { Order, OrderItem } from "../model/orderModel";
-import { OrderDAO } from "../persistencia/mongodb/orderDAO";
+import { OrderDAO } from "../persistance/mongodb/orderDAO";
 
 const cartDAO: CartDAO = DAOFactory.createDAO(CART) as CartDAO;
 const orderDAO: OrderDAO = DAOFactory.createDAO(ORDER) as OrderDAO;
@@ -91,45 +89,18 @@ const createOrder = async (
   return order;
 };
 
-const checkout = async ({ email, phoneNumber, names }) => {
+const checkout = async ({ email, phoneNumber, name }) => {
   const { products } = await cartService.getByOwnerEmail(email);
-  const order = await createOrder(email, products);
 
-  // Admin notification
+  await createOrder(email, products);
 
-  const productList = products.reduce(
-    (prev, current) =>
-      prev +
-      `<div>Code: ${current.code} Name: ${current.name} Price: $${current.price} Count: ${current.stock}</div>`,
-    ""
-  );
-  const mailOptions = {
-    from: "E-commerce",
-    to: ADMIN_EMAIL,
-    subject: "Nuevo pedido",
-    html: `<h1>Se ha generado un nuevo pedido:</h1>
-      ${productList}`,
-  };
-  const adminWppNotification = {
-    body: `Nuevo pedido de ${names}. Mail: ${email}`,
-    from: "whatsapp:+14155238886",
-    to: "whatsapp:+5491123458427",
-  };
+  sendOrderNotifications(products, email, phoneNumber, name);
 
-  twilioClient.messages.create(adminWppNotification);
-  transporter.sendMail(mailOptions);
-
-  // User notification
-  const userNotification = {
-    body: `Tu pedido al e-commerce ha sido recibido y está en proceso.`,
-    from: "+19895348213",
-    to: phoneNumber,
-  };
-
-  twilioClient.messages.create(userNotification);
-
-  // Deleting cart.
   await cartService.deleteByEmail(email);
+};
+
+const getOrders = async (email: string): Promise<Order[]> => {
+  return await orderDAO.getAllBy("client", email);
 };
 
 export const cartService = {
@@ -140,4 +111,5 @@ export const cartService = {
   deleteByEmail,
   getOrCreateCart,
   deleteProduct,
+  getOrders,
 };

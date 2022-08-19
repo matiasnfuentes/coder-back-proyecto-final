@@ -1,12 +1,11 @@
 import { DOMAIN } from "../config/config";
-import { UserDTO } from "../persistencia/types";
 import * as os from "os";
 import { Request, Response } from "express";
 import { productService } from "../services/productService";
 import axios from "axios";
-
-const PUBLIC_CHAT = "PUBLIC_CHAT";
-const PRIVATE_CHAT = "PRIVATE_CHAT";
+import { Order } from "../model/orderModel";
+import { ProductDTO } from "../model/productModel";
+import _ from "lodash";
 
 const getLoginFail = (req: Request, res: Response) => {
   res.render("login-fail", { layout: "login-fail", domain: DOMAIN });
@@ -26,31 +25,60 @@ const getLogin = (req: Request, res: Response) => {
 
 const getMainPage = async (req: Request, res: Response) => {
   const { data: products } = await axios.get(`http://${DOMAIN}/api/products/`);
-  res.render("index", { layout: "index", domain: DOMAIN, products });
+  const categories = getProductCategories(products);
+  res.render("index", {
+    layout: "index",
+    domain: DOMAIN,
+    products,
+    categories,
+  });
 };
 
 const getChat = (req: Request, res: Response) => {
-  const { email } = req.user as UserDTO;
+  if (!req.user) return res.redirect("/login");
+
+  const { email } = req.user;
+
   res.render("chat", {
     layout: "chat",
     isPublicChat: true,
     domain: DOMAIN,
     email,
+    isAdminChat: false,
+  });
+};
+
+const getAdminChat = (req: Request, res: Response) => {
+  if (!req.user) return res.redirect("/login");
+
+  const { email } = req.user;
+
+  res.render("chat", {
+    layout: "chat",
+    isPublicChat: true,
+    domain: DOMAIN,
+    email,
+    isAdminChat: true,
   });
 };
 
 const getPrivateChat = (req: Request, res: Response) => {
-  const { email } = req.user as UserDTO;
+  if (!req.user) return res.redirect("/login");
+
+  const { email } = req.user;
+
   res.render("chat", {
     layout: "chat",
     isPublicChat: false,
     domain: DOMAIN,
     email,
+    isAdminChat: false,
   });
 };
 
 const getProfile = (req: Request, res: Response) => {
-  const { email, name, address, age, avatar, phone } = req.user as UserDTO;
+  if (!req.user) return res.redirect("/login");
+  const { email, name, address, age, avatar, phone } = req.user;
   res.render("profile", {
     layout: "profile",
     domain: DOMAIN,
@@ -73,6 +101,28 @@ const getCart = async (req: Request, res: Response) => {
       products: cart.products,
     });
   } catch (e) {
+    res.redirect("/products");
+  }
+};
+
+const getOrders = async (req: Request, res: Response) => {
+  try {
+    const { data: orders } = await axios.get(`http://${DOMAIN}/api/orders/`, {
+      headers: { Cookie: `connect.sid=${req.cookies["connect.sid"]}` },
+    });
+    console.log(orders.map((o) => o.items));
+    res.render("orders", {
+      layout: "orders",
+      orders: orders.map((o: Order) => ({
+        ...o,
+        items: o.items.map(
+          (i) => `${i.name} Cant.: ${i.stock} Precio Unit: ${i.price}`
+        ),
+        time: new Date(o.timestamp).toLocaleString(),
+      })),
+    });
+  } catch (e) {
+    console.log(e);
     res.redirect("/products");
   }
 };
@@ -101,14 +151,22 @@ export const getAddProduct = (req: Request, res: Response) => {
 
 export const getProductCategory = async (req: Request, res: Response) => {
   try {
-    // nimplemented View
     const category = req.params.category;
     const products = await productService.getByCategory(category);
-    res.send(products);
+    const categories = getProductCategories(products);
+    res.render("index", {
+      layout: "index",
+      domain: DOMAIN,
+      products,
+      categories,
+    });
   } catch (e) {
     res.redirect("/products");
   }
 };
+
+const getProductCategories = (products: ProductDTO[]) =>
+  _.uniq(products.map((p: ProductDTO) => p.category));
 
 export const viewController = {
   getLoginFail,
@@ -123,4 +181,6 @@ export const viewController = {
   getProductCategory,
   getChat,
   getPrivateChat,
+  getAdminChat,
+  getOrders,
 };

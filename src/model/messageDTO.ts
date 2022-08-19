@@ -1,4 +1,4 @@
-import { Serializable } from "../persistencia/types";
+import { Serializable } from "../persistance/types";
 
 export namespace MessageType {
   export const USER = "USER";

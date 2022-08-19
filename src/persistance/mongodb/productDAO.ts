@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { MongoDAO } from "./mongoDAO";
-import { ProductDTO } from "../types";
+import { ProductDTO } from "../../model/productModel";
 
 export class ProductDAO extends MongoDAO<ProductDTO> {
   private static _instance: ProductDAO | null = null;

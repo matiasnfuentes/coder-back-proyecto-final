@@ -41,7 +41,7 @@ function addProduct(id, name, price, description, code, thumbnail) {
         }),
       });
     })
-    .then((res) => {
-      window.location.replace(res.url);
+    .then(() => {
+      window.location.reload();
     });
 }

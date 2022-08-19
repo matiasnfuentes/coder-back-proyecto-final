@@ -1,4 +1,4 @@
-import { ProductDTO } from "../persistencia/types";
+import { ProductDTO } from "./productModel";
 
 export namespace OrderType {
   export const GENERATED = "GENERATED";
@@ -9,7 +9,7 @@ export namespace OrderType {
 export type OrderType = typeof OrderType[keyof typeof OrderType];
 export type OrderItem = Pick<
   ProductDTO,
-  "_id" | "stock" | "price" | "description"
+  "_id" | "name" | "stock" | "price" | "description"
 >;
 
 export class Order {
@@ -23,7 +23,7 @@ export class Order {
   constructor(
     client: string,
     items: OrderItem[] = [],
-    status: OrderType = OrderType.COMPLETED
+    status: OrderType = OrderType.GENERATED
   ) {
     this.client = client;
     this.items = items;

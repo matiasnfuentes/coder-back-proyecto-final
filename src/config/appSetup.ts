@@ -17,7 +17,7 @@ import cors from "cors";
 const VIEWS_PATH = __dirname + "/../public/views";
 const PARTIALS_PATH = __dirname + "/../public/views/partials/";
 
-export const setUpApp = (app: express.Application) => {
+export const setUpApp = (app: express.Application, session) => {
   // Set render engine
   app.engine(
     "hbs",
@@ -34,17 +34,7 @@ export const setUpApp = (app: express.Application) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use(
-    session({
-      store: MongoStore.create({
-        mongoUrl: MONGO_URL,
-        ttl: SESSION_EXPARTION_TIME || 600,
-      }),
-      secret: SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-    })
-  );
+  app.use(session);
   app.use(
     cors({
       origin: [`http://${DOMAIN}`, `https://${DOMAIN}`],
@@ -59,3 +49,14 @@ export const setUpApp = (app: express.Application) => {
 
   setUpPassport(passport);
 };
+
+export const createSession = () =>
+  session({
+    store: MongoStore.create({
+      mongoUrl: MONGO_URL,
+      ttl: SESSION_EXPARTION_TIME || 600,
+    }),
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  });

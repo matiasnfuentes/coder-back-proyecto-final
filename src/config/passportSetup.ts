@@ -2,10 +2,9 @@ import { userService } from "../services/userService";
 import { Strategy as LocalStrategy } from "passport-local";
 import { PassportStatic } from "passport";
 import { logger } from "../services/logger";
-import { transporter } from "../services/messageService";
-import { ADMIN_EMAIL } from "./config";
+import { sendRegisterNotification } from "../services/messageService";
 import { checkBodyErrors } from "../middlewares/validator";
-import { UserDTO } from "../persistencia/types";
+import { UserDTO } from "../model/userModel";
 
 export const setUpPassport = (passport: PassportStatic) => {
   passport.serializeUser((user: any, done) => {
@@ -40,19 +39,7 @@ export const setUpPassport = (passport: PassportStatic) => {
             phone,
           });
 
-          const mailOptions = {
-            from: "E-commerce",
-            to: ADMIN_EMAIL,
-            subject: "A new user has been registered",
-            html: `<h1>A new user has been registered:</h1>
-           <p>Email: ${email}</p>
-           <p>Name: ${name}</p>
-           <p>Address: ${address}</p>
-           <p>Age: ${age}</p>
-           <p>Phone: ${phone}</p>`,
-          };
-
-          transporter.sendMail(mailOptions);
+          sendRegisterNotification(user);
 
           return done(null, user);
         } catch (e: any) {

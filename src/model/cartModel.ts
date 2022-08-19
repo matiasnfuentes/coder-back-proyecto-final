@@ -1,4 +1,5 @@
-import { ProductDTO, Serializable } from "../persistencia/types";
+import { Serializable } from "../persistance/types";
+import { ProductDTO } from "./productModel";
 
 export interface ICart extends Serializable {
   products: ProductDTO[];
@@ -52,3 +53,8 @@ export class Cart implements ICart {
     return this.products.splice(i, 1)[0];
   }
 }
+
+export type CartDTO = Omit<
+  Cart,
+  "addProduct" | "addProducts" | "deleteProduct"
+>;

@@ -31,42 +31,30 @@
       <div class="col-8 mt-5" id="product-table">
 
         <h2>Carrito</h2>
-        {{#if products}}
+        {{#if orders}}
           <table class="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Precio</th>
-                <th scope="col">Thumbnail</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Eliminar del carrito</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Detalle</th>
               </tr>
             </thead>
             <tbody>
-              {{#each products}}
+              {{#orders}}
                 <tr>
                   <th
                     class="align-middle text-center"
                     scope="row"
                   >{{@index}}</th>
-                  <td class="align-middle text-center">{{this.name}} </td>
-                  <td class="align-middle text-center">${{this.price}} </td>
-                  <td class="align-middle text-center"><img
-                      src="{{this.thumbnail}}"
-                      alt="imagen del prod"
-                      style="width: 150px; height:150px;"
-                    /></td>
-                  <td class="align-middle text-center">{{this.stock}}</td>
+                  <td class="align-middle text-center">{{status}} </td>
+                  <td class="align-middle text-center">{{time}} </td>
                   <td class="align-middle text-center">
-                    <button
-                      class="btn-primary"
-                      onClick="deleteProduct(`{{this._id}}`)"
-                    >Eliminar</button>
-
-                  </td>
+                   {{#each items}}<p>{{this}}</p>{{/each}}
+                   </td>
                 </tr>
-              {{/each}}
+              {{/orders}}
             </tbody>
           </table>
         {{else}}
@@ -77,7 +65,6 @@
         <div class="d-flex justify-content-around mt-5">
           <div class="d-flex justify-content-around col-6">
             <a class="btn btn-primary" href="/products">Continuar comprando</a>
-            <button class="btn btn-primary" onClick="checkout()">Finalizar Compra</button>
           </div>
         </div>
       </div>
@@ -89,7 +76,6 @@
       crossorigin="anonymous"
     >
     </script>
-    <script src="/cart.js"></script>
   </body>
 
 </html>

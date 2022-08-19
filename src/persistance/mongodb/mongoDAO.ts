@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { MONGO_URL } from "../../config/config";
-import { Serializable } from "..//types";
+import { Serializable } from "../types";
 import { DAO } from "../types";
 
 export const URLMONGO: string = MONGO_URL;

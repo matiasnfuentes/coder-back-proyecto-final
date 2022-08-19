@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { UserDTO } from "..//types";
+import { UserDTO } from "../../model/userModel";
 import { MongoDAO } from "./mongoDAO";
 
 export class UserDAO extends MongoDAO<UserDTO> {

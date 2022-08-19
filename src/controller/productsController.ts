@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import { ProductDTO } from "../persistencia/types";
+import { ProductDTO } from "../model/productModel";
 import { productService } from "../services/productService";
 import { checkBodyErrors } from "../middlewares/validator";
-import { rejectRequest } from "../helpers/rejectRequest";
+import { rejectRequest } from "../middlewares/rejectRequest";
 
 const { Router } = express;
 
