@@ -92,6 +92,8 @@ const createOrder = async (
 const checkout = async ({ email, phoneNumber, name }) => {
   const { products } = await cartService.getByOwnerEmail(email);
 
+  if (products.length === 0) return;
+
   await createOrder(email, products);
 
   sendOrderNotifications(products, email, phoneNumber, name);
